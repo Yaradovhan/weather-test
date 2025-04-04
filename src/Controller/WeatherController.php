@@ -58,11 +58,11 @@ class WeatherController extends AbstractController
      * Show history weather for the city
      * Date on or after 1st Jan, 2010 in yyyy-MM-dd format (ex. '2015-01-01')
      */
-    #[Route('weather/history/{city}/{days}', name: 'weather_history')]
-    public function weatherHistory(Request $request, string $city, string $days): Response
+    #[Route('weather/history/{city}/{date}', name: 'weather_history')]
+    public function weatherHistory(Request $request, string $city, string $date): Response
     {
         /** @var WeatherApiInterface $weatherData */
-        $weatherData = $this->weatherService->history($city, $days)->handle();
+        $weatherData = $this->weatherService->history($city, $date)->handle();
 
         if ($weatherData->getError()) {
             $this->addFlash('error', $weatherData->getError());
@@ -78,11 +78,11 @@ class WeatherController extends AbstractController
      * Show future weather for the city
      * Date between 14 days and 300 days from today in the future in yyyy-MM-dd format (ex. '2025-10-10')
      */
-    #[Route('weather/future/{city}/{days}', name: 'weather_future')]
-    public function weatherFuture(Request $request, string $city, string $days): Response
+    #[Route('weather/future/{city}/{date}', name: 'weather_future')]
+    public function weatherFuture(Request $request, string $city, string $date): Response
     {
         /** @var WeatherApiInterface $weatherData */
-        $weatherData = $this->weatherService->future($city, $days)->handle();
+        $weatherData = $this->weatherService->future($city, $date)->handle();
 
         if ($weatherData->getError()) {
             $this->addFlash('error', $weatherData->getError());
