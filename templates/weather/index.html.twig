@@ -1,0 +1,66 @@
+{# templates/weather/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if weatherData.location is not null %}
+    <h1>Current Weather in {{ weatherData.location.name }}</h1>
+    <div>
+        <strong>Country:</strong> {{ weatherData.location.country }}<br>
+        <strong>Region:</strong> {{ weatherData.location.region }}<br>
+        <strong>Coordinates:</strong> {{ weatherData.location.lat }}, {{ weatherData.location.lon }}<br>
+        <strong>Local Time:</strong> {{ weatherData.location.localtime }}
+    </div>
+    <hr>
+    {% else %}
+        <p>No current weather data location available.</p>
+    {% endif %}
+
+    {% if weatherData.current is not null %}
+    <h2>Current Conditions</h2>
+    <div>
+        <strong>Temperature (°C):</strong> {{ weatherData.current.temp_c }}<br>
+        <strong>Feels Like (°C):</strong> {{ weatherData.current.feelslike_c }}<br>
+        <strong>Humidity:</strong> {{ weatherData.current.humidity }}%<br>
+        <strong>Conditions:</strong> {{ weatherData.current.condition.text }}<br>
+        <img
+                src="https:{{ weatherData.current.condition.icon }}"
+                alt="Weather Icon"
+        >
+    </div>
+    <hr>
+    {% else %}
+        <p>No current weather data available.</p>
+    {% endif %}
+
+    {% if weatherData.forecast is not null %}
+    <h2>Weather Forecast</h2>
+        {% for day in weatherData.forecast.forecastday %}
+            <div style="margin-bottom: 1rem;">
+                <h3>{{ day.date }}</h3>
+                <p>
+                    <strong>Max Temp (°C):</strong> {{ day.day.maxtemp_c }}<br>
+                    <strong>Min Temp (°C):</strong> {{ day.day.mintemp_c }}<br>
+                    <strong>Avg Temp (°C):</strong> {{ day.day.avgtemp_c }}<br>
+                    <strong>Conditions:</strong> {{ day.day.condition.text }}<br>
+                    <img
+                            src="https:{{ day.day.condition.icon }}"
+                            alt="Forecast Icon"
+                    >
+                </p>
+                <strong>Astronomy:</strong><br>
+                — Sunrise: {{ day.astro.sunrise }}<br>
+                — Sunset: {{ day.astro.sunset }}<br>
+                — Moon Phase: {{ day.astro.moon_phase }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No forecast available.</p>
+    {% endif %}
+
+    {# In case of errors #}
+    {% if weatherData.error %}
+        <div style="color: red;">
+            <strong>Error:</strong> {{ weatherData.error }}
+        </div>
+    {% endif %}
+{% endblock %}
